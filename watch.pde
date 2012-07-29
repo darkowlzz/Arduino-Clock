@@ -8,14 +8,15 @@ struct Date  {
 
 Date today = { 12, 7, 29};  //  current date
 int h=0, m=0, s=0, ms = 0;  //  hours, minutes, seconds, milliseconds
-int mode = 0;
+int pin2Mode = 0, pin3Mode = 0;
 
 LiquidCrystal lcd(12,11,5,4,3,2);
 const int buttonPin1 = 6;
 const int buttonPin2 = 10;
+const int buttonPin3 = 9;
 const int led = 13;
 
-int buttonState1 = 0, buttonState2 = 0;
+int buttonState1 = 0, buttonState2 = 0, buttonState3 = 0;
 
 void regTime(int t) {
     //  stores the current time in the system
@@ -65,18 +66,23 @@ void loop()  {
   
     buttonState1 = digitalRead(buttonPin1);
     
-    if (digitalRead(buttonPin2) == HIGH)    {
-        mode++;
+    if (digitalRead(buttonPin2) == HIGH)    {   // when button2 is pressed
+        pin2Mode++;
     }
     
+    // check button1 for LED light
+
     if( buttonState1 == HIGH)  {
         digitalWrite(led, HIGH);
     }
     else  {
         digitalWrite(led, LOW);
     }
-
-    if (mode == 0)  {    
+    
+    // end button1 check
+    
+    //mode check
+    if (pin2Mode == 0)  {    
         regTime(1);
         printTime();
   
@@ -89,20 +95,55 @@ void loop()  {
   
         delay(1000);
     }
-    else if (mode == 1) {
+    else if (pin2Mode == 1) {
+        regTime(1);
         lcd.clear();
         lcd.print("mode1");
         delay(1000);
     }
-    else if (mode == 2) {
+    else if (pin2Mode == 2) {
+        // mode 2 starts
+
         lcd.clear();
+        if (digitalRead(buttonPin3) == HIGH)    {
+            pin3Mode++;
+        }
+    
+        lcd.setCursor(0,0);
         lcd.print("mode2");
+        
+        if (pin3Mode == 0)  {
+            regTime(1);
+            lcd.setCursor(0,1);
+            lcd.print("Change time");
+        }
+        else if (pin3Mode == 1)  {
+            regTime(1);
+            lcd.setCursor(0,1);
+            lcd.print("Hour: ");
+            lcd.print(h);
+        }
+        else if (pin3Mode == 2) {
+            regTime(1);
+            lcd.setCursor(0,1);
+            lcd.print("Minutes: ");
+            lcd.print(m);
+        }
+        else if (pin3Mode == 3) {
+            regTime(1);
+            lcd.setCursor(0,1);
+            lcd.print("back to T-M-0");
+            pin3Mode = 0;
+        }
+        
         delay(1000);
+
+        // mode 2 ends
     }
-    else if (mode == 3) {
+    else if (pin2Mode == 3) {
         lcd.clear();
         lcd.print("back to mode0");
         delay(2000);
-        mode = 0;
+        pin2Mode = 0;
     }
 }
