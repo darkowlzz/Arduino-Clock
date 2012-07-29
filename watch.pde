@@ -15,6 +15,7 @@ const int buttonPin1 = 6;
 const int buttonPin2 = 10;
 const int buttonPin3 = 9;
 const int buttonPin4 = 8;
+const int buttonPin5 = 7;
 const int led = 13;
 
 int buttonState1 = 0, buttonState2 = 0, buttonState3 = 0, buttonState4 = 0;
@@ -126,6 +127,9 @@ void loop()  {
             if (digitalRead(buttonPin4) == HIGH)    {
                 h++;
             }
+			else if (digitalRead(buttonPin5) == HIGH)	{
+				h--;
+			}
             lcd.print(h);
         }
         else if (pin3Mode == 2) {
@@ -135,6 +139,9 @@ void loop()  {
             if (digitalRead(buttonPin4) == HIGH)    {
                 m++;
             }
+			else if (digitalRead(buttonPin5) == HIGH)	{
+				m--;
+			}
             lcd.print(m);
         }
         else if (pin3Mode == 3) {
