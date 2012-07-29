@@ -38,6 +38,10 @@ void regTime(int t) {
     }
 
     if (h == 24)  { //reset hours
+        today.day++;
+        if (today.day > 31) {
+            today.day = 1;
+        }
         h = 0;
     }
 }
@@ -124,11 +128,14 @@ void loop()  {
             regTime(1);
             lcd.setCursor(0,1);
             lcd.print("Hour: ");
-            if (digitalRead(buttonPin4) == HIGH)    {
+            if (digitalRead(buttonPin4) == HIGH)    {   // increment hours
                 h++;
             }
-			else if (digitalRead(buttonPin5) == HIGH)	{
+			else if (digitalRead(buttonPin5) == HIGH)	{   // decrement hours
 				h--;
+                if (h < 0)  {
+                    h = 23;
+                }
 			}
             lcd.print(h);
         }
@@ -136,11 +143,14 @@ void loop()  {
             regTime(1);
             lcd.setCursor(0,1);
             lcd.print("Minutes: ");
-            if (digitalRead(buttonPin4) == HIGH)    {
+            if (digitalRead(buttonPin4) == HIGH)    {   // increment minutes
                 m++;
             }
-			else if (digitalRead(buttonPin5) == HIGH)	{
+			else if (digitalRead(buttonPin5) == HIGH)	{   // decrement minutes
 				m--;
+                if (m < 0)  {
+                    m = 59;
+                }
 			}
             lcd.print(m);
         }
@@ -156,6 +166,76 @@ void loop()  {
         // mode 2 ends
     }
     else if (pin2Mode == 3) {
+        lcd.clear();
+        if (digitalRead(buttonPin3) == HIGH)    {
+            pin3Mode++;
+        }
+
+        lcd.setCursor(0,0);
+        lcd.print("mode3");
+        
+        if (pin3Mode == 0)  {
+            regTime(1);
+            lcd.setCursor(0,1);
+            lcd.print("Edit Date");
+        }
+        else if (pin3Mode == 1) {
+                regTime(1);
+                lcd.setCursor(0,1);
+                lcd.print("Day: ");
+                if (digitalRead(buttonPin4) == HIGH)    {
+                    today.day++;
+                    if (today.day > 31) {
+                        today.day = 1;
+                    }      
+                }
+                else if (digitalRead(buttonPin5) == HIGH)   {
+                        today.day--;
+                        if (today.day < 1) {
+                            today.day = 31;
+                        }
+                }
+                lcd.print(today.day);
+        }
+        else if (pin3Mode == 2) {
+            regTime(1);
+            lcd.setCursor(0,1);
+            lcd.print("Month: ");
+            if (digitalRead(buttonPin4) == HIGH)    {
+                today.month++;
+                if (today.month > 12)   {
+                    today.month = 1;
+                }
+            }
+            else if (digitalRead(buttonPin5) == HIGH)   {
+                today.month--;
+                if (today.month < 1)    {
+                    today.month = 12;
+                }
+            }
+            lcd.print(today.month);
+        }
+        else if (pin3Mode == 3) {
+            regTime(1);
+            lcd.setCursor(0,1);
+            lcd.print("Year: ");
+            if (digitalRead(buttonPin4) == HIGH)    {
+                today.year++;
+            }
+            else if (digitalRead(buttonPin5) == HIGH)   {
+                today.year--;
+            }
+            lcd.print(today.year);
+        }
+        else if (pin3Mode == 4) {
+            regTime(1);
+            lcd.setCursor(0,1);
+            lcd.print("back to D-M-0");
+            pin3Mode = 0;
+        }
+        delay(1000);
+    }  
+    else if (pin2Mode == 4) {
         lcd.clear();
         lcd.print("back to mode0");
         delay(2000);
