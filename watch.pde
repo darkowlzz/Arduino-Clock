@@ -14,9 +14,10 @@ LiquidCrystal lcd(12,11,5,4,3,2);
 const int buttonPin1 = 6;
 const int buttonPin2 = 10;
 const int buttonPin3 = 9;
+const int buttonPin4 = 8;
 const int led = 13;
 
-int buttonState1 = 0, buttonState2 = 0, buttonState3 = 0;
+int buttonState1 = 0, buttonState2 = 0, buttonState3 = 0, buttonState4 = 0;
 
 void regTime(int t) {
     //  stores the current time in the system
@@ -31,6 +32,7 @@ void regTime(int t) {
     }
 
     if (m == 60)  { //reset minutes 
+        h++;
         m=0;
     }
 
@@ -121,12 +123,18 @@ void loop()  {
             regTime(1);
             lcd.setCursor(0,1);
             lcd.print("Hour: ");
+            if (digitalRead(buttonPin4) == HIGH)    {
+                h++;
+            }
             lcd.print(h);
         }
         else if (pin3Mode == 2) {
             regTime(1);
             lcd.setCursor(0,1);
             lcd.print("Minutes: ");
+            if (digitalRead(buttonPin4) == HIGH)    {
+                m++;
+            }
             lcd.print(m);
         }
         else if (pin3Mode == 3) {
